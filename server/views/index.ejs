@@ -1,0 +1,207 @@
+<%- include('partials/header') %>
+<%- include('partials/main_nav') %>
+<main>
+
+  <!-- ===== SPLASH PAGE (For Non-Authenticated Users) ===== -->
+  <% if (!isAuthenticated) { %>
+    <div class="splash-container">
+      <!-- Hero Section with Splash -->
+      <div class="splash-hero" style="background: linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);min-height:100vh;display:flex;align-items:center;justify-content:center;">
+        <div class="text-center text-white splash-content">
+          <img src="/Asset/images/CampusConnectLogo.png" alt="Campus Connect Logo" height="120" class="mb-4">
+          <h1 class="display-3 fw-bold mb-3">Campus Connect</h1>
+          <p class="display-6 mb-4">Your Student Hub for Buy/Sell, Services & Events</p>
+          <p class="fs-5 mb-5" style="max-width: 600px; margin: 0 auto;">
+            Connect with students on campus. Buy and sell items, offer services, discover events, and build your student community.
+          </p>
+          
+          <!-- Call-to-Action Buttons -->
+          <div class="splash-buttons">
+            <a href="/auth/login" class="btn btn-light btn-lg m-3" style="padding: 0.75rem 2rem; font-weight: 600; border-radius: 8px;">
+              <strong>Login</strong>
+            </a>
+            <a href="/auth/register" class="btn btn-warning btn-lg m-3" style="padding: 0.75rem 2rem; font-weight: 600; border-radius: 8px;">
+              <strong>Create Account</strong>
+            </a>
+          </div>
+
+          <!-- Info Cards Below -->
+          <div class="container mt-5">
+            <div class="row g-4">
+              <div class="col-md-4">
+                <div class="info-card" style="background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 12px; backdrop-filter: blur(10px);">
+                  <h5 class="mb-2">📦 Marketplace</h5>
+                  <p class="small">Buy and sell items with fellow students</p>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="info-card" style="background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 12px; backdrop-filter: blur(10px);">
+                  <h5 class="mb-2">🎯 Services</h5>
+                  <p class="small">Offer or find student services</p>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="info-card" style="background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 12px; backdrop-filter: blur(10px);">
+                  <h5 class="mb-2">🎉 Events</h5>
+                  <p class="small">Discover campus events and activities</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% } else { %>
+
+  <!-- ===== HOME PAGE (For Authenticated Users) ===== -->
+    <!-- Hero Section -->
+    <div class="p-5 text-center bg-image" style="background: linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);height:320px;">
+      <div class="d-flex justify-content-center align-items-center h-100">
+        <div class="text-white">
+          <img src="/Asset/images/CampusConnectLogo.png" alt="Site Logo" height="100">
+          <h1 class="mb-3 display-3 fw-bold">Campus Connect</h1>
+          <p class="display-6">Welcome, <%= displayName %>!</p>
+          <a href="/listings/new" class="btn btn-warning btn-lg m-3">Create Listing</a>
+          <a href="/events" class="btn btn-info btn-lg m-3">View Events</a>
+        </div>
+      </div>
+    </div>
+
+  <div class="container my-5">
+    <h2 class="mb-4">Featured Listings <a href="/listings" class="btn btn-sm btn-outline-primary float-end">View All</a></h2>
+
+    <div class="cards-grid">
+      <% if (listings && listings.length) { %>
+        <% listings.forEach(function(item) { %>
+          <div class="card-item">
+            <div class="card-image" "></div>
+            <div class="card-body">
+              <div class="card-tags">
+                <span class="pill"><%= item.category %></span>
+              </div>
+              <h3 class="card-title"><%= item.title %></h3>
+              <p class="card-price">$<strong><%= item.price %></strong></p>
+              <p class="card-meta">Condition: <%= item.condition %> • By <%= item.seller %></p>
+              <div class="card-actions">
+                <a href="/listings/<%= item._id %>" class="btn btn-cta">View Details</a>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p>No featured listings yet.</p>
+      <% } %>
+    </div>
+
+    <hr class="my-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="mb-0">Upcoming Events</h2>
+      <a href="/events" class="btn btn-sm btn-outline-primary">View All</a>
+    </div>
+
+    <div class="cards-grid events-grid">
+      <% if (events && events.length) { %>
+        <% events.forEach(function(ev) { %>
+          <div class="card-item event-item">
+            <div class="card-body">
+              <div class="card-tags">
+                <span class="pill pill-event"><%= ev.category %></span>
+              </div>
+              <h3 class="card-title"><%= ev.title %></h3>
+              <p class="card-desc"><%= ev.description.substring(0, 120) %>...</p>
+              <p class="card-meta"><span> <%= new Date(ev.date).toLocaleDateString() %></span> • <span> <%= ev.time %></span> • <span> <%= ev.location %></span></p>
+              <div class="card-actions">
+                <a href="/events" class="btn btn-cta btn-sm">View Details</a>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p>No upcoming events.</p>
+      <% } %>
+    </div>
+
+    <hr class="my-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="mb-0">Services</h2>
+      <a href="/services" class="btn btn-sm btn-outline-primary">View All</a>
+    </div>
+
+    <div class="services-section">
+      <div class="services-controls mb-3">
+        <input id="serviceSearch" type="search" placeholder="Search services or providers" class="service-search" />
+      </div>
+
+      <div class="cards-grid services-grid">
+        <% if (services && services.length) { %>
+          <% services.forEach(function(svc) { %>
+            <div class="card-item service-item">
+              <div class="card-body">
+                <div class="card-tags">
+                  <span class="pill pill-service"><%= svc.category %></span>
+                </div>
+                <h3 class="card-title"><%= svc.title %></h3>
+                <p class="card-desc"><%= svc.description.substring(0, 100) %>...</p>
+                <p class="card-meta">By <%= svc.providerName %> • <span class="rate"> <%= svc.rate || 'Free' %> </span></p>
+                <div class="card-actions">
+                  <a href="/services/<%= svc._id %>" class="btn btn-cta btn-sm">Contact Provider</a>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        <% } else { %>
+          <p>No services found.</p>
+        <% } %>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<% } %>
+
+<style>
+/* Grid and card styles for featured sections */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+.card-item {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(16,24,40,0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.card-image {
+  height: 160px;
+  background-size: cover;
+  background-position: center;
+}
+.card-body { padding: 1rem; display:flex; flex-direction:column; gap:0.5rem; }
+.card-tags { margin-bottom: 0.25rem; }
+.pill { display:inline-block; padding:0.25rem 0.6rem; border-radius:999px; font-size:0.8rem; background:#eef2ff; color:#3730a3; }
+.pill-event { background:#ffeedd; color:#a64b00; }
+.pill-service { background:#e8f7ff; color:#084298; }
+.card-title { font-size:1.1rem; margin:0; }
+.card-price { color:#ff4d4f; font-size:1.05rem; margin:0; }
+.card-meta { color:#6b7280; font-size:0.9rem; }
+.card-desc { color:#374151; font-size:0.95rem; }
+.card-actions { margin-top:auto; }
+.btn-cta { background: linear-gradient(90deg,#7c3aed,#06b6d4); color:#fff; padding:0.5rem 0.9rem; border-radius:8px; text-decoration:none; }
+.btn-cta:hover { opacity:0.95; transform:translateY(-1px); }
+.rate { color:#6d28d9; font-weight:700; }
+
+/* Responsive tweaks */
+@media (max-width: 576px) {
+  .card-image { height: 140px; }
+}
+
+</style>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,205 @@
+<%- include('partials/header') %>
+<%- include('partials/main_nav') %>
+
+<div class="events-container">
+  <h1>Campus Events</h1>
+  
+  <!-- Search Bar -->
+  <div class="search-filter-bar">
+    <input 
+      type="text" 
+      id="eventSearch" 
+      class="search-input" 
+      placeholder="Search events by title or location..."
+      onkeyup="filterEvents()"
+    >
+    
+    <!-- Filter Dropdown -->
+    <select id="categoryFilter" class="filter-select" onchange="filterEvents()">
+      <option value="">All Categories</option>
+      <option value="Academic">Academic</option>
+      <option value="Social">Social</option>
+      <option value="Sports">Sports</option>
+      <option value="Workshop">Workshop</option>
+      <option value="Networking">Networking</option>
+      <option value="Other">Other</option>
+    </select>
+    
+    <!-- Add Event Button -->
+    <a href="/events/offer" class="btn btn-primary">+ Add Event</a>
+  </div>
+
+  <!-- Events Grid -->
+  <div class="events-grid">
+    <% if (events && events.length > 0) { %>
+      <% events.forEach(event => { %>
+        <div class="event-card" data-category="<%= event.category %>" data-title="<%= event.title %>">
+          <div class="event-header">
+            <h3><%= event.title %></h3>
+            <span class="category-badge"><%= event.category %></span>
+          </div>
+          
+          <p class="event-description"><%= event.description %></p>
+          
+          <div class="event-details">
+            <p><strong> Date:</strong> <%= new Date(event.date).toLocaleDateString() %></p>
+            <p><strong> Time:</strong> <%= event.time %></p>
+            <p><strong> Location:</strong> <%= event.location %></p>
+            <p><strong> Organizer:</strong> <%= event.organizerName %></p>
+          </div>
+          
+          <div class="event-footer">
+            <a href="mailto:<%= event.contact %>" class="btn btn-secondary">Contact Organizer</a>
+          </div>
+        </div>
+      <% }); %>
+    <% } else { %>
+      <p class="no-events">No events available. <a href="/events/offer">Create one!</a></p>
+    <% } %>
+  </div>
+</div>
+
+<script>
+function filterEvents() {
+  const searchInput = document.getElementById('eventSearch').value.toLowerCase();
+  const categoryFilter = document.getElementById('categoryFilter').value;
+  const cards = document.querySelectorAll('.event-card');
+
+  cards.forEach(card => {
+    const title = card.getAttribute('data-title').toLowerCase();
+    const category = card.getAttribute('data-category');
+
+    const matchesSearch = title.includes(searchInput);
+    const matchesCategory = categoryFilter === '' || category === categoryFilter;
+
+    card.style.display = (matchesSearch && matchesCategory) ? 'block' : 'none';
+  });
+}
+</script>
+
+<style>
+.events-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.search-filter-bar {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.search-input,
+.filter-select {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  flex: 1;
+  min-width: 200px;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  font-weight: 500;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+.btn-secondary:hover {
+  background-color: #545b62;
+}
+
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.event-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1.5rem;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.event-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.event-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 1rem;
+}
+
+.event-header h3 {
+  margin: 0;
+  color: #333;
+}
+
+.category-badge {
+  background-color: #007bff;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.event-description {
+  color: #666;
+  margin: 1rem 0;
+  line-height: 1.5;
+}
+
+.event-details {
+  margin: 1rem 0;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.event-details p {
+  margin: 0.5rem 0;
+}
+
+.event-footer {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+}
+
+.no-events {
+  text-align: center;
+  color: #999;
+  grid-column: 1 / -1;
+  padding: 2rem;
+}
+</style>
+
+<%- include('partials/footer') %>

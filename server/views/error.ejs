@@ -1,0 +1,14 @@
+<%- include('partials/header') %>
+<%- include('partials/main_nav') %>
+
+    <div class="container mt-5">
+        <h1><%= typeof message !== 'undefined' ? message : 'Error' %></h1>
+        <% if (error && error.status) { %>
+            <h2><%= error.status %></h2>
+        <% } %>
+        <% if (error && error.stack) { %>
+            <pre><%= error.stack %></pre>
+        <% } %>
+    </div>
+
+<%- include('partials/footer') %>

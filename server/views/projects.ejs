@@ -1,0 +1,65 @@
+<%- include('partials/header') %>
+<%- include('partials/main_nav') %>
+<main>
+  <div class="container my-5">
+    <h2><%= title %></h2>
+    
+    <!-- Filter and Search -->
+    <div class="row mb-4">
+      <div class="col-md-6">
+        <form method="get" action="/listings" class="d-flex gap-2">
+          <input type="text" name="search" class="form-control" placeholder="Search listings..." value="<%= searchQuery %>">
+          <select name="category" class="form-select">
+            <option value="">All Categories</option>
+            <option value="electronics" <%= selectedCategory === 'electronics' ? 'selected' : '' %>>Electronics</option>
+            <option value="books" <%= selectedCategory === 'books' ? 'selected' : '' %>>Books</option>
+            <option value="furniture" <%= selectedCategory === 'furniture' ? 'selected' : '' %>>Furniture</option>
+            <option value="services" <%= selectedCategory === 'services' ? 'selected' : '' %>>Services</option>
+          </select>
+          <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+      </div>
+      <div class="col-md-6 text-end">
+        <a href="/listings/new" class="btn btn-success">Create New Listing</a>
+      </div>
+    </div>
+
+    <!-- Listings Grid -->
+    <div class="row">
+      <% if (listings && listings.length > 0) { %>
+        <% listings.forEach(listing => { %>
+          <div class="col-md-4 mb-4">
+            <div class="card h-100">
+              <% if (listing.image) { %>
+                <img src="<%= listing.image %>" class="card-img-top" alt="<%= listing.title %>" style="height: 200px; object-fit: cover;">
+              <% } else { %>
+                <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
+                  <span class="text-white">No Image</span>
+                </div>
+              <% } %>
+              <div class="card-body">
+                <h5 class="card-title"><%= listing.title %></h5>
+                <p class="card-text"><%= listing.description %></p>
+                <p class="text-muted">By: <strong><%= listing.seller %></strong></p>
+                <p class="card-text">Category: <%= listing.category %></p>
+                <p class="text-success"><strong>$<%= listing.price %></strong></p>
+              </div>
+              <div class="card-footer bg-light d-flex gap-2">
+                <a href="/listings/<%= listing._id %>" class="btn btn-sm btn-info">View</a>
+                <a href="/listings/<%= listing._id %>/edit" class="btn btn-sm btn-warning">Edit</a>
+                <form method="post" action="/listings/<%= listing._id %>/delete" style="display:inline;">
+                  <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete this listing?')">Delete</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        <% }); %>
+      <% } else { %>
+        <div class="col-12">
+          <div class="alert alert-info">No listings found. <a href="/listings/new">Create one!</a></div>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</main>
+<%- include('partials/footer') %>

@@ -1,0 +1,135 @@
+<%- include('partials/header') %>
+<%- include('partials/main_nav') %>
+
+<style>
+  html, body {
+    height: 100%;
+    margin: 0;
+    background: #f5f7fa;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .main-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+
+  .login-card {
+    border-radius: 20px;
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow: 0px 10px 30px rgba(0,0,0,0.15);
+    padding: 50px 45px;
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+    transition: transform 0.2s ease;
+  }
+
+  .login-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .login-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 30px;
+  }
+
+  .form-label {
+    font-weight: 600;
+    color: #555;
+  }
+
+  .form-control {
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 1rem;
+  }
+
+  .btn-login {
+    background: #4a6cf7;
+    border: none;
+    padding: 14px;
+    width: 100%;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: white;
+    transition: 0.2s ease-in-out;
+    margin-top: 15px;
+  }
+
+  .btn-login:hover {
+    background: #3d59d4;
+  }
+
+  .register-link {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 1rem;
+  }
+
+  .register-link a {
+    color: #4a6cf7;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .register-link a:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<div class="main-container">
+  <div class="login-card">
+
+    <h1 class="login-title">Welcome Back</h1>
+
+    <% if (typeof error !== 'undefined' && error) { %>
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <%= error %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      </div>
+    <% } %>
+
+    <form action="/auth/login" method="POST">
+
+      <div class="mb-3">
+        <label class="form-label">Username or Email</label>
+        <input 
+          type="text" 
+          name="username" 
+          class="form-control" 
+          placeholder="Enter your username"
+          required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input 
+          type="password" 
+          name="password" 
+          class="form-control"
+          placeholder="Enter your password"
+          required>
+      </div>
+
+      <button type="submit" class="btn-login">Login</button>
+
+    </form>
+
+    <div class="register-link">
+      Don't have an account? <a href="/auth/register">Create one here</a>
+    </div>
+
+  </div>
+</div>
+
+<%- include('partials/footer') %>

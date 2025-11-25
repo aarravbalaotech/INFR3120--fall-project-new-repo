@@ -1,0 +1,87 @@
+<%- include('partials/header') %>
+<%- include('partials/main_nav') %>
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card">
+        <% if (listing.image) { %>
+          <img src="<%= listing.image %>" class="card-img-top" alt="<%= listing.title %>" style="max-height: 400px; object-fit: cover;">
+        <% } else { %>
+          <img src="/Asset/images/CampusConnectLogo.png" class="card-img-top" alt="<%= listing.title %>" style="max-height: 400px; object-fit: cover;">
+        <% } %>
+        
+        <div class="card-body">
+          <h1 class="card-title"><%= listing.title %></h1>
+          
+          <div class="mb-3">
+            <span class="badge bg-primary"><%= listing.category %></span>
+            <span class="badge bg-info"><%= listing.condition %></span>
+          </div>
+
+          <h3 class="text-success mb-3">$<%= listing.price.toFixed(2) %></h3>
+
+          <div class="mb-3">
+            <h5>Description</h5>
+            <p><%= listing.description %></p>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <strong>Seller:</strong> <%= listing.seller %>
+            </div>
+            <div class="col-md-6">
+              <strong>Location:</strong> <%= listing.location %>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <strong>Contact:</strong> <%= listing.contact %>
+          </div>
+
+          <div class="mb-3">
+            <small class="text-muted">
+              Posted: <%= new Date(listing.createdAt).toLocaleDateString() %>
+            </small>
+          </div>
+
+          <div class="d-grid gap-2">
+            <a href="/listings/<%= listing._id %>/edit" class="btn btn-warning">Edit Listing</a>
+            <form action="/listings/<%= listing._id %>/delete" method="POST" style="display: inline;">
+              <button type="submit" class="btn btn-danger w-100" onclick="return confirm('Are you sure?')">Delete Listing</button>
+            </form>
+            <a href="/listings" class="btn btn-secondary">Back to Listings</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Contact Seller</h5>
+          <p class="card-text">
+            <strong>Name:</strong> <%= listing.seller %><br>
+            <strong>Email/Phone:</strong> <%= listing.contact %><br>
+            <strong>Location:</strong> <%= listing.location %>
+          </p>
+          <a href="mailto:<%= listing.contact %>" class="btn btn-primary w-100">Send Message</a>
+        </div>
+      </div>
+
+      <div class="card mt-3">
+        <div class="card-body">
+          <h5 class="card-title">Item Details</h5>
+          <ul class="list-unstyled">
+            <li><strong>Category:</strong> <%= listing.category %></li>
+            <li><strong>Condition:</strong> <%= listing.condition %></li>
+            <li><strong>Price:</strong> $<%= listing.price.toFixed(2) %></li>
+            <li><strong>Posted:</strong> <%= new Date(listing.createdAt).toLocaleDateString() %></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

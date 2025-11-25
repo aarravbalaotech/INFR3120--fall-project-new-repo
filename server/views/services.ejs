@@ -1,0 +1,220 @@
+<%- include('partials/header') %>
+<%- include('partials/main_nav') %>
+
+<div class="services-container">
+  <h1>Campus Services</h1>
+  
+  <!-- Search Bar -->
+  <div class="search-filter-bar">
+    <input 
+      type="text" 
+      id="serviceSearch" 
+      class="search-input" 
+      placeholder="Search services by title..."
+      onkeyup="filterServices()"
+    >
+    
+    <!-- Filter Dropdown -->
+    <select id="categoryFilter" class="filter-select" onchange="filterServices()">
+      <option value="">All Categories</option>
+      <option value="Tutoring">Tutoring</option>
+      <option value="Roommate Find">Roommate Find</option>
+      <option value="Carpool">Carpool</option>
+      <option value="Printing">Printing</option>
+      <option value="Tech Help">Tech Help</option>
+      <option value="Other">Other</option>
+    </select>
+    
+    <!-- Offer Service Button -->
+    <a href="/services/offer" class="btn btn-success">Offer Service</a>
+  </div>
+
+  <!-- Services Grid -->
+  <div class="services-grid">
+    <% if (services && services.length > 0) { %>
+      <% services.forEach(service => { %>
+        <div class="service-card" data-category="<%= service.category %>" data-title="<%= service.title %>">
+          <% if (service.image) { %>
+            <img src="<%= service.image %>" class="service-image" alt="Service Image">
+          <% } %>
+          
+          <div class="service-body">
+            <h5 class="service-title"><%= service.title %></h5>
+            <span class="category-badge"><%= service.category %></span>
+            <p class="service-description"><%= service.description %></p>
+            
+            <% if (service.rate) { %>
+              <p class="service-rate"><strong>Rate:</strong> <%= service.rate %></p>
+            <% } %>
+            
+            <div class="service-details">
+              <p><strong>Provider:</strong> <%= service.providerName %></p>
+              <p><strong>Contact:</strong> <%= service.contact %></p>
+            </div>
+            
+            <div class="service-footer">
+              <a href="mailto:<%= service.contact %>" class="btn btn-secondary">Contact Provider</a>
+            </div>
+          </div>
+        </div>
+      <% }); %>
+    <% } else { %>
+      <p class="no-services">No services available. <a href="/services/offer">Offer one!</a></p>
+    <% } %>
+  </div>
+</div>
+
+<script>
+function filterServices() {
+  const searchInput = document.getElementById('serviceSearch').value.toLowerCase();
+  const categoryFilter = document.getElementById('categoryFilter').value;
+  const cards = document.querySelectorAll('.service-card');
+
+  cards.forEach(card => {
+    const title = card.getAttribute('data-title').toLowerCase();
+    const category = card.getAttribute('data-category');
+
+    const matchesSearch = title.includes(searchInput);
+    const matchesCategory = categoryFilter === '' || category === categoryFilter;
+
+    card.style.display = (matchesSearch && matchesCategory) ? 'block' : 'none';
+  });
+}
+</script>
+
+<style>
+.services-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.search-filter-bar {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.search-input,
+.filter-select {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  flex: 1;
+  min-width: 200px;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  font-weight: 500;
+}
+
+.btn-success {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+.btn-secondary:hover {
+  background-color: #545b62;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.service-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.service-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.service-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.service-body {
+  padding: 1.5rem;
+}
+
+.service-title {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+}
+
+.category-badge {
+  display: inline-block;
+  background-color: #007bff;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.service-description {
+  color: #666;
+  margin: 0.5rem 0;
+  line-height: 1.5;
+}
+
+.service-rate {
+  color: #28a745;
+  font-weight: bold;
+  margin: 0.5rem 0;
+}
+
+.service-details {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 1rem 0;
+}
+
+.service-details p {
+  margin: 0.25rem 0;
+}
+
+.service-footer {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+}
+
+.no-services {
+  text-align: center;
+  color: #999;
+  grid-column: 1 / -1;
+  padding: 2rem;
+}
+</style>
+
+<%- include('partials/footer') %>

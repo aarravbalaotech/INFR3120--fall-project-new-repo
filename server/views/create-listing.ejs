@@ -1,0 +1,105 @@
+<%- include('partials/header') %>
+<%- include('partials/main_nav') %>
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <h1 class="mb-4">Create New Listing</h1>
+      
+      <% if (typeof error !== 'undefined') { %>
+        <div class="alert alert-danger" role="alert">
+          <%= error %>
+        </div>
+      <% } %>
+
+      <form action="/listings" method="POST" class="needs-validation" novalidate>
+        
+        <div class="mb-3">
+          <label for="title" class="form-label">Item Title <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" id="title" name="title" required 
+                 placeholder="Enter item title">
+        </div>
+
+        <div class="mb-3">
+          <label for="description" class="form-label">Description <span class="text-danger">*</span></label>
+          <textarea class="form-control" id="description" name="description" rows="4" required 
+                    placeholder="Describe the item in detail"></textarea>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="price" class="form-label">Price ($) <span class="text-danger">*</span></label>
+            <input type="number" class="form-control" id="price" name="price" required 
+                   placeholder="0.00" min="0" step="0.01">
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="category" class="form-label">Category <span class="text-danger">*</span></label>
+            <select class="form-select" id="category" name="category" required>
+              <option value="">Select a category</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Books">Books</option>
+              <option value="Furniture">Furniture</option>
+              <option value="Clothing">Clothing</option>
+              <option value="Sports">Sports</option>
+              <option value="Services">Services</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="condition" class="form-label">Condition <span class="text-danger">*</span></label>
+            <select class="form-select" id="condition" name="condition" required>
+              <option value="">Select condition</option>
+              <option value="New">New</option>
+              <option value="Like New">Like New</option>
+              <option value="Good">Good</option>
+              <option value="Fair">Fair</option>
+            </select>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="seller" class="form-label">Your Name <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="seller" name="seller" required 
+                   placeholder="Your name">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="contact" class="form-label">Contact (Email/Phone) <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="contact" name="contact" required 
+                   placeholder="your.email@example.com or +1-XXX-XXX-XXXX">
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="location" class="form-label">Location</label>
+            <input type="text" class="form-control" id="location" name="location" 
+                   placeholder="Where can it be picked up?" value="Ontario Tech University">
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="image" class="form-label">Image URL</label>
+          <input type="text" class="form-control" id="image" name="image" 
+                 placeholder="https://example.com/image.jpg">
+        </div>
+
+        <div class="d-grid gap-2">
+          <button type="submit" class="btn btn-primary btn-lg">Create Listing</button>
+          <a href="/listings" class="btn btn-secondary">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<style>
+  .text-danger {
+    color: #dc3545;
+  }
+</style>
+
+<%- include('partials/footer') %>

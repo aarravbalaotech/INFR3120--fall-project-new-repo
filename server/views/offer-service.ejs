@@ -1,0 +1,169 @@
+<%- include('partials/header') %>
+<%- include('partials/main_nav') %>
+
+<div class="form-container">
+  <h1>Offer a Service</h1>
+  
+  <% if (typeof error !== 'undefined' && error) { %>
+    <div class="alert alert-error"><%= error %></div>
+  <% } %>
+
+  <form action="/services/offer" method="POST" enctype="multipart/form-data" class="service-form">
+    <div class="form-group">
+      <label for="title">Service Title <span class="required">*</span></label>
+      <input type="text" id="title" name="title" required>
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description <span class="required">*</span></label>
+      <textarea id="description" name="description" rows="4" required></textarea>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="category">Category <span class="required">*</span></label>
+        <select id="category" name="category" required>
+          <option value="">Select a category</option>
+          <option value="Tutoring">Tutoring</option>
+          <option value="Roommate Find">Roommate Find</option>
+          <option value="Carpool">Carpool</option>
+          <option value="Printing">Printing</option>
+          <option value="Tech Help">Tech Help</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="rate">Rate/Price</label>
+        <input type="text" id="rate" name="rate" placeholder="e.g., $15/hour">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="providerName">Your Name <span class="required">*</span></label>
+      <input type="text" id="providerName" name="providerName" required>
+    </div>
+
+    <div class="form-group">
+      <label for="contact">Contact Email/Phone <span class="required">*</span></label>
+      <input type="text" id="contact" name="contact" required placeholder="email@example.com or +1-XXX-XXX-XXXX">
+    </div>
+
+    <div class="form-group">
+      <label for="image">Service Image (optional)</label>
+      <input type="file" id="image" name="image" accept="image/*">
+    </div>
+
+    <div class="button-group">
+      <button type="submit" class="btn btn-primary">Post Service</button>
+      <a href="/services" class="btn btn-secondary">Cancel</a>
+    </div>
+  </form>
+</div>
+
+<style>
+.form-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-container h1 {
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.required {
+  color: #dc3545;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.alert {
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 4px;
+}
+
+.alert-error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.btn {
+  flex: 1;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  font-weight: 500;
+  text-align: center;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #545b62;
+}
+</style>
+
+<%- include('partials/footer') %>

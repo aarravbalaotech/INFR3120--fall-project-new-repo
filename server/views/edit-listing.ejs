@@ -1,0 +1,102 @@
+<%- include('partials/header') %>
+<%- include('partials/main_nav') %>
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <h1 class="mb-4">Edit Listing</h1>
+      
+      <% if (typeof error !== 'undefined') { %>
+        <div class="alert alert-danger" role="alert">
+          <%= error %>
+        </div>
+      <% } %>
+
+      <form action="/listings/<%= listing._id %>/update" method="POST" class="needs-validation" novalidate>
+        
+        <div class="mb-3">
+          <label for="title" class="form-label">Item Title <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" id="title" name="title" required 
+                 value="<%= listing.title %>">
+        </div>
+
+        <div class="mb-3">
+          <label for="description" class="form-label">Description <span class="text-danger">*</span></label>
+          <textarea class="form-control" id="description" name="description" rows="4" required><%= listing.description %></textarea>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="price" class="form-label">Price ($) <span class="text-danger">*</span></label>
+            <input type="number" class="form-control" id="price" name="price" required 
+                   value="<%= listing.price %>" min="0" step="0.01">
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="category" class="form-label">Category <span class="text-danger">*</span></label>
+            <select class="form-select" id="category" name="category" required>
+              <option value="Electronics" <%= listing.category === 'Electronics' ? 'selected' : '' %>>Electronics</option>
+              <option value="Books" <%= listing.category === 'Books' ? 'selected' : '' %>>Books</option>
+              <option value="Furniture" <%= listing.category === 'Furniture' ? 'selected' : '' %>>Furniture</option>
+              <option value="Clothing" <%= listing.category === 'Clothing' ? 'selected' : '' %>>Clothing</option>
+              <option value="Sports" <%= listing.category === 'Sports' ? 'selected' : '' %>>Sports</option>
+              <option value="Services" <%= listing.category === 'Services' ? 'selected' : '' %>>Services</option>
+              <option value="Other" <%= listing.category === 'Other' ? 'selected' : '' %>>Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="condition" class="form-label">Condition <span class="text-danger">*</span></label>
+            <select class="form-select" id="condition" name="condition" required>
+              <option value="New" <%= listing.condition === 'New' ? 'selected' : '' %>>New</option>
+              <option value="Like New" <%= listing.condition === 'Like New' ? 'selected' : '' %>>Like New</option>
+              <option value="Good" <%= listing.condition === 'Good' ? 'selected' : '' %>>Good</option>
+              <option value="Fair" <%= listing.condition === 'Fair' ? 'selected' : '' %>>Fair</option>
+            </select>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="seller" class="form-label">Your Name <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="seller" name="seller" required 
+                   value="<%= listing.seller %>">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="contact" class="form-label">Contact (Email/Phone) <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="contact" name="contact" required 
+                   value="<%= listing.contact %>">
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="location" class="form-label">Location</label>
+            <input type="text" class="form-control" id="location" name="location" 
+                   value="<%= listing.location %>">
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="image" class="form-label">Image URL</label>
+          <input type="text" class="form-control" id="image" name="image" 
+                 value="<%= listing.image %>">
+        </div>
+
+        <div class="d-grid gap-2">
+          <button type="submit" class="btn btn-primary btn-lg">Update Listing</button>
+          <a href="/listings/<%= listing._id %>" class="btn btn-secondary">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<style>
+  .text-danger {
+    color: #dc3545;
+  }
+</style>
+
+<%- include('partials/footer') %>
