@@ -207,7 +207,7 @@ app.use((req, res, next) => {
   res.locals.isAuthenticated = req.isAuthenticated();
   res.locals.displayName = req.user ? req.user.displayName : null;
   res.locals.user = req.user || null;
-  res.locals.error = req.flash('error');
+  // Don't consume flash messages here - let routes handle them
   next();
 });
 
