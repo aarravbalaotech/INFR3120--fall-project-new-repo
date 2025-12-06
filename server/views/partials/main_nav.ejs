@@ -1,19 +1,12 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark modern-nav py-3 shadow-sm">
   <div class="container-fluid">
-
-    <!-- Brand -->
-    <a class="navbar-brand fw-bold fs-3" href="/">Campus Connect</a>
-
-    <!-- Mobile Toggle -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+    <a class="navbar-brand" href="/">Campus Connect</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <!-- Menu -->
-    <div class="collapse navbar-collapse" id="navbarNav">
-
-      <!-- Left Menu -->
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0 nav-links gap-2">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
         <li class="nav-item"><a class="nav-link" href="/listings">Marketplace</a></li>
         <li class="nav-item"><a class="nav-link" href="/services">Services</a></li>
@@ -21,27 +14,17 @@
         <li class="nav-item"><a class="nav-link" href="/about">About/Team</a></li>
       </ul>
 
-      <!-- Center Welcome Message -->
       <% if (isAuthenticated) { %>
-        <span class="navbar-text text-white mx-3 fw-semibold fade-in">
-          Welcome, <strong><%= displayName %></strong>
-        </span>
-      <% } %>
-
-      <!-- Right Menu -->
-      <ul class="navbar-nav mb-2 mb-lg-0 gap-2">
-        <% if (isAuthenticated) { %>
-          <li class="nav-item">
-            <a class="btn btn-outline-light px-3" href="/auth/logout">Logout</a>
-          </li>
-        <% } else { %>
+        <span class="navbar-text mx-auto text-center px-3">Welcome, <strong><%= displayName %></strong></span>
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="/auth/logout">Logout</a></li>
+        </ul>
+      <% } else { %>
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
           <li class="nav-item"><a class="nav-link" href="/auth/login">Login</a></li>
-          <li class="nav-item">
-            <a class="btn btn-primary px-3" href="/auth/register">Register</a>
-          </li>
-        <% } %>
-      </ul>
-
+          <li class="nav-item"><a class="nav-link" href="/auth/register">Register</a></li>
+        </ul>
+      <% } %>
     </div>
   </div>
 </nav>

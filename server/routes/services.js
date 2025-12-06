@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Service = require('../model/Service');
 const multer = require('multer');
+const requireAuth = require('../middleware/requireAuth');
 const upload = multer({ dest: 'public/uploads/' });
 
 /* GET all services with optional filter/search */
@@ -18,12 +19,12 @@ router.get('/', async (req, res, next) => {
 });
 
 /* GET offer service form */
-router.get('/offer', (req, res) => {
+router.get('/offer', requireAuth, (req, res) => {
   res.render('offer-service', { title: 'Offer a Service' });
 });
 
 /* POST create new service */
-router.post('/offer', upload.single('image'), async (req, res, next) => {
+router.post('/offer', requireAuth, upload.single('image'), async (req, res, next) => {
   try {
     const serviceData = req.body;
     if (req.file) {

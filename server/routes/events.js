@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const Event = require('../model/Event');
+const requireAuth = require('../middleware/requireAuth');
 
 /* GET events page. */
 router.get('/', function(req, res, next) {
@@ -12,12 +13,12 @@ router.get('/', function(req, res, next) {
 });
 
 /* GET offer event form. */
-router.get('/offer', function(req, res, next) {
+router.get('/offer', requireAuth, function(req, res, next) {
   res.render('offer-event', { title: 'Create Event' });
 });
 
 /* POST create event. */
-router.post('/offer', function(req, res, next) {
+router.post('/offer', requireAuth, function(req, res, next) {
   const { title, description, date, time, location, category, contact, organizerName } = req.body;
 
   if (!title || !description || !date || !time || !location || !category || !contact || !organizerName) {
