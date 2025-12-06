@@ -1,12 +1,18 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark modern-nav py-3 shadow-sm">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm py-3 modern-nav">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/">Campus Connect</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+
+    <!-- Logo -->
+    <a class="navbar-brand fw-bold fs-3" href="/">Campus Connect</a>
+
+    <!-- Mobile toggle -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    <div class="collapse navbar-collapse" id="navbarNav">
+      
+      <!-- Left Links -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-2">
         <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
         <li class="nav-item"><a class="nav-link" href="/listings">Marketplace</a></li>
         <li class="nav-item"><a class="nav-link" href="/services">Services</a></li>
@@ -14,18 +20,29 @@
         <li class="nav-item"><a class="nav-link" href="/about">About/Team</a></li>
       </ul>
 
+      <!-- Center welcome text -->
       <% if (isAuthenticated) { %>
-        <span class="navbar-text mx-auto text-center px-3">Welcome, <strong><%= displayName %></strong></span>
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link" href="/auth/logout">Logout</a></li>
-        </ul>
-      <% } else { %>
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link" href="/auth/login">Login</a></li>
-          <li class="nav-item"><a class="nav-link" href="/auth/register">Register</a></li>
-        </ul>
+      <span class="navbar-text text-white mx-3 fw-semibold fade-in">
+        Welcome, <strong><%= displayName %></strong>
+      </span>
       <% } %>
+
+      <!-- Right buttons -->
+      <ul class="navbar-nav mb-2 mb-lg-0 gap-2">
+        <% if (isAuthenticated) { %>
+          <li class="nav-item">
+            <a class="btn btn-outline-light px-3" href="/auth/logout">Logout</a>
+          </li>
+        <% } else { %>
+          <li class="nav-item">
+            <a class="nav-link" href="/auth/login">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-primary px-3" href="/auth/register">Register</a>
+          </li>
+        <% } %>
+      </ul>
+
     </div>
   </div>
 </nav>
-

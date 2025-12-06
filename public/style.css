@@ -64,3 +64,34 @@
   from { opacity: 0; transform: translateY(-3px); }
   to { opacity: 1; transform: translateY(0); }
 }
+/* Modern frosted navbar */
+.modern-nav {
+  background: rgba(0, 0, 0, 0.90) !important;
+  backdrop-filter: blur(6px);
+}
+
+/* Hover animation */
+.navbar .nav-link {
+  transition: 0.2s ease-in-out;
+}
+
+.navbar .nav-link:hover {
+  color: #0d6efd !important;
+  transform: translateY(-2px);
+}
+
+/* Fade-in welcome */
+.fade-in {
+  animation: fadein 0.4s ease-in-out;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
