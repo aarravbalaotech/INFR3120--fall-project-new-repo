@@ -1,0 +1,147 @@
+<% if (user) { %>
+  <style>
+    #profileModal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      backdrop-filter: blur(6px);
+    }
+  
+    .hidden {
+      display: none !important;
+    }
+  
+    .modal-container {
+      background: linear-gradient(145deg, #ffffff, #f2f4f8);
+      border-radius: 20px;
+      padding: 35px 30px;
+      width: 420px;
+      max-width: 92%;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.35);
+      animation: scaleIn 0.25s cubic-bezier(.2,.8,.2,1);
+    }
+  
+    @keyframes scaleIn {
+      from { transform: scale(0.85); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+  
+    .profile-avatar {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: #e0e7ff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 2rem;
+      color: #4a6cf7;
+      margin-bottom: 15px;
+      overflow: hidden;
+      object-fit: cover;
+    }
+
+    .profile-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  
+    .close-modal {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: #f1f3f5;
+      border: none;
+      font-size: 18px;
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+
+    .close-modal:hover {
+      background: #e0e0e0;
+    }
+  
+    .profile-buttons {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .profile-btn {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s;
+      font-size: 0.95rem;
+    }
+
+    .btn-view-profile {
+      background: linear-gradient(135deg, #4a6cf7, #2e5bdb);
+      color: white;
+    }
+
+    .btn-view-profile:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(74, 108, 247, 0.3);
+    }
+
+    .logout-btn {
+      background: linear-gradient(135deg, #ff4d4d, #d63031);
+      color: white;
+    }
+
+    .logout-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 77, 77, 0.3);
+    }
+  </style>
+  
+  <div id="profileModal" class="hidden" onclick="event.target.id === 'profileModal' && closeProfileModal()">
+    <div class="modal-container">
+  
+      <button class="close-modal" onclick="closeProfileModal()">×</button>
+  
+      <div class="profile-avatar">
+        <% if (user.profilePicture) { %>
+          <img src="<%= user.profilePicture %>" alt="<%= user.displayName %>">
+        <% } else { %>
+          <%= user.displayName.charAt(0).toUpperCase() %>
+        <% } %>
+      </div>
+  
+      <h2><%= user.displayName %></h2>
+      <p style="color:#666;"><%= user.email %></p>
+  
+      <div class="profile-buttons">
+        <a href="/users/profile" class="profile-btn btn-view-profile">View Full Profile</a>
+        <a href="/auth/logout" class="profile-btn logout-btn">Logout</a>
+      </div>
+  
+    </div>
+  </div>
+  <% } %>
+  
+  
+  
+  
+    
+    
+    
+    
