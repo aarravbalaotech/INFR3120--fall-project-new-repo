@@ -3,7 +3,7 @@ const router = express.Router();
 const passport = require('passport');
 const User = require('../model/User');
 
-// ===== LOGIN =====
+//  LOGIN 
 router.get('/login', (req, res) => {
   if (req.isAuthenticated()) return res.redirect('/');
   const errorMsg = req.flash('error')[0]; // get first error message
@@ -17,7 +17,7 @@ router.post('/login', passport.authenticate('local', {
   res.redirect('/');
 });
 
-// ===== REGISTER =====
+//  REGISTER 
 router.get('/register', (req, res) => {
   if (req.isAuthenticated()) return res.redirect('/');
   const errorMsg = req.flash('error')[0]; // get first error message
@@ -61,12 +61,117 @@ router.post('/register', async (req, res, next) => {
   }
 });
 
-// ===== LOGOUT =====
+//  LOGOUT 
 router.get('/logout', (req, res, next) => {
   req.logout(err => {
     if (err) return next(err);
     res.redirect('/');
   });
+});
+
+//  GOOGLE OAUTH 
+router.get('/google', passport.authenticate('google', {
+  scope: ['profile', 'email']
+}));
+
+router.get('/google/callback', passport.authenticate('google', {
+  failureRedirect: '/auth/login',
+  failureFlash: 'Google authentication failed'
+}), (req, res) => {
+  res.redirect('/');
+});
+
+//  GITHUB OAUTH 
+router.get('/github', passport.authenticate('github', {
+  scope: ['user:email']
+}));
+
+router.get('/github/callback', passport.authenticate('github', {
+  failureRedirect: '/auth/login',
+  failureFlash: 'GitHub authentication failed'
+}), (req, res) => {
+  res.redirect('/');
+});
+
+//  OAUTH LINKING FOR AUTHENTICATED USERS
+// Link Google OAuth to existing profile
+router.get('/link/google', (req, res, next) => {
+  if (!req.isAuthenticated()) {
+    return res.redirect('/auth/login');
+  }
+  // Check if Google is already connected
+  User.findById(req.user._id, (err, user) => {
+    if (err) return next(err);
+    if (user && user.googleId) {
+      return res.redirect('/users/profile?message=google_already_connected');
+    }
+    // Proceed with Google auth
+    passport.authenticate('google', {
+      scope: ['profile', 'email']
+    })(req, res, next);
+  });
+});
+
+router.get('/link/google/callback', passport.authenticate('google', {
+  failureRedirect: '/users/profile',
+  failureFlash: 'Google authentication failed'
+}), async (req, res, next) => {
+  try {
+    // If already authenticated, link the Google ID to the existing user
+    if (req.user && req.user._id) {
+      const user = await User.findById(req.user._id);
+      if (user) {
+        user.googleId = req.user.googleId || req.user.id;
+        if (!user.authProvider || user.authProvider === 'local') {
+          user.authProvider = 'google';
+        }
+        await user.save();
+      }
+    }
+    res.redirect('/users/profile?message=google_connected');
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Link GitHub OAuth to existing profile
+router.get('/link/github', (req, res, next) => {
+  if (!req.isAuthenticated()) {
+    return res.redirect('/auth/login');
+  }
+  // Check if GitHub is already connected
+  User.findById(req.user._id, (err, user) => {
+    if (err) return next(err);
+    if (user && user.githubId) {
+      return res.redirect('/users/profile?message=github_already_connected');
+    }
+    // Proceed with GitHub auth
+    passport.authenticate('github', {
+      scope: ['user:email']
+    })(req, res, next);
+  });
+});
+
+router.get('/link/github/callback', passport.authenticate('github', {
+  failureRedirect: '/users/profile',
+  failureFlash: 'GitHub authentication failed'
+}), async (req, res, next) => {
+  try {
+    // If already authenticated, link the GitHub ID to the existing user
+    if (req.user && req.user._id) {
+      const user = await User.findById(req.user._id);
+      if (user) {
+        user.githubId = req.user.githubId || req.user.id;
+        if (!user.authProvider || user.authProvider === 'local') {
+          user.authProvider = 'github';
+        }
+        await user.save();
+      }
+    }
+    res.redirect('/users/profile?message=github_connected');
+  } catch (err) {
+    next(err);
+  }
 });
 
 module.exports = router;
