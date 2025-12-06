@@ -6,7 +6,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     unique: true,
     sparse: true,
-    required: true
+    required: function() {
+      // Username only required if not using OAuth
+      return !this.googleId && !this.githubId;
+    }
   },
   email: {
     type: String,
@@ -20,6 +23,28 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     trim: true
+  },
+  profilePicture: {
+    type: String,
+    default: null
+  },
+  // OAuth fields
+  googleId: {
+    type: String,
+    unique: true,
+    sparse: true,
+    default: null
+  },
+  githubId: {
+    type: String,
+    unique: true,
+    sparse: true,
+    default: null
+  },
+  authProvider: {
+    type: String,
+    enum: ['local', 'google', 'github'],
+    default: 'local'
   },
   createdAt: {
     type: Date,
