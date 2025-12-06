@@ -28,18 +28,16 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: null
   },
-  // OAuth fields
+  // OAuth fields - Don't set default to allow sparse index to work properly
   googleId: {
     type: String,
     unique: true,
-    sparse: true,
-    default: null
+    sparse: true
   },
   githubId: {
     type: String,
     unique: true,
-    sparse: true,
-    default: null
+    sparse: true
   },
   authProvider: {
     type: String,
