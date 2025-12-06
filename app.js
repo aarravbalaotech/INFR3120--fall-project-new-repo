@@ -9,6 +9,8 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const GitHubStrategy = require('passport-github2').Strategy;
 const MongoStore = require('connect-mongo');
 const flash = require('connect-flash');
 
@@ -60,9 +62,124 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
+// ===== Passport Strategies =====
+// Local Strategy
 passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+
+// Google Strategy
+passport.use(new GoogleStrategy({
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackURL: process.env.GOOGLE_CALLBACK_URI || '/auth/google/callback'
+}, async (accessToken, refreshToken, profile, done) => {
+  try {
+    // Try to find user by Google ID
+    let user = await User.findOne({ googleId: profile.id });
+    
+    if (user) {
+      return done(null, user);
+    }
+    
+    // Check if email already exists
+    const existingEmail = await User.findOne({ email: profile.emails[0].value });
+    if (existingEmail) {
+      // Link Google ID to existing account
+      existingEmail.googleId = profile.id;
+      existingEmail.authProvider = 'google';
+      await existingEmail.save();
+      return done(null, existingEmail);
+    }
+    
+    // Create new user
+    const newUser = new User({
+      googleId: profile.id,
+      email: profile.emails[0].value,
+      displayName: profile.displayName,
+      authProvider: 'google',
+      username: profile.id // Use Google ID as username
+    });
+    
+    await newUser.save();
+    done(null, newUser);
+  } catch (err) {
+    done(err);
+  }
+}));
+
+// GitHub Strategy
+passport.use(new GitHubStrategy({
+  clientID: process.env.GITHUB_CLIENT_ID,
+  clientSecret: process.env.GITHUB_CLIENT_SECRET,
+  callbackURL: process.env.GITHUB_CALLBACK_URI || '/auth/github/callback'
+}, async (accessToken, refreshToken, profile, done) => {
+  try {
+    // Try to find user by GitHub ID
+    let user = await User.findOne({ githubId: profile.id });
+    
+    if (user) {
+      return done(null, user);
+    }
+    
+    // Check if email already exists
+    const userEmail = profile.emails && profile.emails[0] ? profile.emails[0].value : null;
+    if (userEmail) {
+      const existingEmail = await User.findOne({ email: userEmail });
+      if (existingEmail) {
+        // Link GitHub ID to existing account
+        existingEmail.githubId = profile.id;
+        existingEmail.authProvider = 'github';
+        await existingEmail.save();
+        return done(null, existingEmail);
+      }
+    }
+    
+    // Create new user
+    const newUser = new User({
+      githubId: profile.id,
+      email: userEmail || `${profile.username}@github.local`,
+      displayName: profile.displayName || profile.username,
+      authProvider: 'github',
+      username: profile.username // Use GitHub username
+    });
+    
+    await newUser.save();
+    done(null, newUser);
+  } catch (err) {
+    done(err);
+  }
+}));
+
+// Serialization
+passport.serializeUser((user, done) => {
+  done(null, user._id);
+});
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    const mongoose = require('mongoose');
+    let user = null;
+
+    // If id looks like an ObjectId, use findById. Otherwise try legacy/session values (username, provider ids, email)
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      user = await User.findById(id);
+    }
+
+    if (!user) {
+      user = await User.findOne({
+        $or: [
+          { username: id },
+          { googleId: id },
+          { githubId: id },
+          { email: id }
+        ]
+      });
+    }
+
+    done(null, user);
+  } catch (err) {
+    done(err);
+  }
+});
 
 // ===== Locals =====
 app.use((req, res, next) => {
@@ -84,10 +201,22 @@ app.use('/events', eventsRouter);
 // ===== 404 =====
 app.use((req, res, next) => next(createError(404)));
 
-// ===== Error Handler =====
+// ===== Error Handler ===== please work 
 app.use((err, req, res, next) => {
   const isDev = req.app.get('env') === 'development';
   const errorLocals = isDev ? err : {};
+  // Ensure  the auth/local variables available even during errors
+  try {
+    res.locals.isAuthenticated = typeof req.isAuthenticated === 'function' ? req.isAuthenticated() : false;
+    res.locals.displayName = req.user ? req.user.displayName : null;
+    res.locals.user = req.user || null;
+  } catch (e) {
+    // ignore
+  }
+
+  // Log the error stack to the console for debugging
+  console.error('Unhandled error:', err && err.stack ? err.stack : err);
+
   res.status(err.status || 500);
   res.render('error', {
     title: 'Error',
