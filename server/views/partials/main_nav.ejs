@@ -1,8 +1,8 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm py-3 modern-nav">
+<nav class="navbar navbar-expand-lg navbar-dark py-3 modern-nav" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); box-shadow: 0 8px 32px rgba(79, 172, 254, 0.3);">
   <div class="container-fluid">
 
     <!-- Logo -->
-    <a class="navbar-brand fw-bold fs-3" href="/">Campus Connect</a>
+    <a class="navbar-brand fw-bold fs-3" href="/" style="display: flex; align-items: center; gap: 12px; transition: all 0.3s ease;"><span>🎓</span> Campus Connect</a>
 
     <!-- Mobile toggle -->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -13,27 +13,41 @@
       
       <!-- Left Links -->
       <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-2">
-        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="/listings">Marketplace</a></li>
-        <li class="nav-item"><a class="nav-link" href="/services">Services</a></li>
-        <li class="nav-item"><a class="nav-link" href="/events">Events</a></li>
-        <li class="nav-item"><a class="nav-link" href="/about">About/Team</a></li>
+        <li class="nav-item"><a class="nav-link nav-modern" href="/">Home</a></li>
+        <% if (typeof isAuthenticated !== 'undefined' && isAuthenticated) { %>
+          <li class="nav-item"><a class="nav-link nav-modern" href="/listings">Marketplace</a></li>
+          <li class="nav-item"><a class="nav-link nav-modern" href="/services">Services</a></li>
+          <li class="nav-item"><a class="nav-link nav-modern" href="/events">Events</a></li>
+          <li class="nav-item"><a class="nav-link nav-modern" href="/about">About/Team</a></li>
+        <% } %>
       </ul>
 
-      <!-- Center welcome text -->
-      <% if (isAuthenticated) { %>
-      <span class="navbar-text text-white mx-3 fw-semibold fade-in">
-        Welcome, <strong><%= displayName %></strong>
-      </span>
-      <% } %>
-
-      <!-- Right buttons -->
+      <!-- Right Side: Authentication Section -->
       <ul class="navbar-nav mb-2 mb-lg-0 gap-2">
-        <% if (isAuthenticated) { %>
-          <li class="nav-item">
-            <a class="btn btn-outline-light px-3" href="/auth/logout">Logout</a>
+        <% if (typeof isAuthenticated !== 'undefined' && isAuthenticated) { %>
+          <!-- User Profile Dropdown -->
+          <li class="nav-item dropdown-user">
+            <button class="user-dropdown-btn" onclick="toggleUserDropdown(event)" title="User Menu">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 4px;"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm.078-10a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-12a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h12ZM1 1a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H1Z"/></svg>
+              <span class="user-name"><%= displayName %></span>
+              <span class="dropdown-caret">▼</span>
+            </button>
+
+            <!-- Dropdown Menu -->
+            <div class="user-dropdown-menu" id="userDropdownMenu">
+              <a href="/users/profile" class="dropdown-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm.078-10a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-12a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h12ZM1 1a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H1Z"/></svg>
+                <span class="item-text">Profile</span>
+              </a>
+              <div class="dropdown-divider"></div>
+              <a href="/auth/logout" class="dropdown-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/><path fill-rule="evenodd" d="M15.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L14.293 6 12.146 3.854a.5.5 0 0 1 .708-.708l3 3z"/><path fill-rule="evenodd" d="M12.5 5a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2a.5.5 0 0 1 .5-.5z"/></svg>
+                <span class="item-text">Logout</span>
+              </a>
+            </div>
           </li>
         <% } else { %>
+          <!-- Non-authenticated links -->
           <li class="nav-item">
             <a class="nav-link" href="/auth/login">Login</a>
           </li>
@@ -46,3 +60,227 @@
     </div>
   </div>
 </nav>
+
+<style>
+  /* Modern Navigation Links */
+  .nav-modern {
+    color: white !important;
+    font-weight: 800;
+    font-size: 0.95rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+  }
+
+  .nav-modern:after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: white;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .nav-modern:hover {
+    transform: translateY(-2px);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .nav-modern:hover:after {
+    width: 100%;
+  }
+
+  /* User Dropdown Styles */
+  .dropdown-user {
+    position: relative;
+  }
+
+  .user-dropdown-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    font-size: 0.95rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    backdrop-filter: blur(10px);
+  }
+
+  .user-dropdown-btn:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  }
+
+  .user-dropdown-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
+  }
+
+  .user-icon {
+    font-size: 1.3rem;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .user-name {
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .dropdown-caret {
+    font-size: 0.75rem;
+    transition: transform 0.3s ease;
+  }
+
+  .user-dropdown-btn.active .dropdown-caret {
+    transform: rotate(180deg);
+  }
+
+  /* Dropdown Menu */
+  .user-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 12px 40px rgba(79, 172, 254, 0.25), 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    min-width: 220px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-15px) scale(0.95);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1050;
+  }
+
+  .user-dropdown-menu.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+  }
+
+  .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    color: #333;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    font-weight: 500;
+  }
+
+  .dropdown-item:hover {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    padding-left: 22px;
+  }
+
+  .dropdown-item svg {
+    transition: all 0.2s ease;
+  }
+
+  .dropdown-item:hover svg {
+    transform: scale(1.1);
+  }
+
+  .item-text {
+    flex: 1;
+    font-weight: 500;
+  }
+
+  .dropdown-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #e0e0e0, transparent);
+    margin: 6px 0;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 576px) {
+    .user-name {
+      display: none;
+    }
+
+    .user-dropdown-btn {
+      padding: 10px 12px;
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .user-dropdown-menu {
+      right: -5px;
+      min-width: 200px;
+    }
+
+    .nav-modern {
+      font-size: 0.9rem;
+    }
+  }
+
+  /* Logo hover effect */
+  .navbar-brand:hover {
+    transform: scale(1.05);
+  }
+
+  /* Smooth transitions */
+  * {
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+</style>
+
+<script>
+  /**
+   * Toggle User Dropdown Menu
+   * Opens/closes the dropdown on click
+   * Closes when clicking outside
+   * 
+   * Integration: This uses the displayName variable from Express session middleware
+   * that's passed via res.locals.displayName in app.js:
+   *   res.locals.displayName = req.user ? req.user.displayName : null;
+   */
+  function toggleUserDropdown(event) {
+    event.stopPropagation(); // Prevent event from bubbling to document
+    const dropdown = document.getElementById('userDropdownMenu');
+    const btn = event.currentTarget;
+    
+    // Toggle active class on button
+    btn.classList.toggle('active');
+    
+    // Toggle show class on dropdown
+    dropdown.classList.toggle('show');
+  }
+
+  /**
+   * Close dropdown when clicking outside
+   */
+  document.addEventListener('click', function(event) {
+    const dropdown = document.getElementById('userDropdownMenu');
+    const dropdownContainer = document.querySelector('.dropdown-user');
+    
+    // If click is outside the dropdown container, close it
+    if (dropdownContainer && !dropdownContainer.contains(event.target)) {
+      dropdown.classList.remove('show');
+      const btn = document.querySelector('.user-dropdown-btn');
+      if (btn) btn.classList.remove('active');
+    }
+  });
+
+  /**
+   * Close dropdown when a menu item is clicked
+   */
+  document.addEventListener('click', function(event) {
+    if (event.target.closest('.dropdown-item')) {
+      const dropdown = document.getElementById('userDropdownMenu');
+      const btn = document.querySelector('.user-dropdown-btn');
+      dropdown.classList.remove('show');
+      if (btn) btn.classList.remove('active');
+    }
+  });
+</script>
