@@ -83,22 +83,30 @@ passport.use(new GoogleStrategy({
     // Check if email already exists
     const existingEmail = await User.findOne({ email: profile.emails[0].value });
     if (existingEmail) {
-      // Link Google ID to existing account
-      existingEmail.googleId = profile.id;
-      existingEmail.authProvider = 'google';
-      await existingEmail.save();
+      // Only link if Google ID is not already set
+      if (!existingEmail.googleId) {
+        existingEmail.googleId = profile.id;
+        if (existingEmail.authProvider === 'local') {
+          existingEmail.authProvider = 'google';
+        }
+        await existingEmail.save();
+      }
       return done(null, existingEmail);
     }
     
-    // Create new user
-    const newUser = new User({
-      googleId: profile.id,
+    // Create new user (only set fields that have values)
+    const newUserData = {
       email: profile.emails[0].value,
       displayName: profile.displayName,
       authProvider: 'google',
-      username: profile.id // Use Google ID as username
-    });
+      username: profile.id
+    };
     
+    if (profile.id) {
+      newUserData.googleId = profile.id;
+    }
+    
+    const newUser = new User(newUserData);
     await newUser.save();
     done(null, newUser);
   } catch (err) {
@@ -125,23 +133,36 @@ passport.use(new GitHubStrategy({
     if (userEmail) {
       const existingEmail = await User.findOne({ email: userEmail });
       if (existingEmail) {
-        // Link GitHub ID to existing account
-        existingEmail.githubId = profile.id;
-        existingEmail.authProvider = 'github';
-        await existingEmail.save();
+        // Only link if GitHub ID is not already set
+        if (!existingEmail.githubId) {
+          existingEmail.githubId = profile.id;
+          if (existingEmail.authProvider === 'local') {
+            existingEmail.authProvider = 'github';
+          }
+          await existingEmail.save();
+        }
         return done(null, existingEmail);
       }
     }
     
-    // Create new user
-    const newUser = new User({
-      githubId: profile.id,
-      email: userEmail || `${profile.username}@github.local`,
+    // Create new user (only set fields that have values)
+    const newUserData = {
       displayName: profile.displayName || profile.username,
       authProvider: 'github',
-      username: profile.username // Use GitHub username
-    });
+      username: profile.username
+    };
     
+    if (profile.id) {
+      newUserData.githubId = profile.id;
+    }
+    
+    if (userEmail) {
+      newUserData.email = userEmail;
+    } else {
+      newUserData.email = `${profile.username}@github.local`;
+    }
+    
+    const newUser = new User(newUserData);
     await newUser.save();
     done(null, newUser);
   } catch (err) {
