@@ -11,7 +11,7 @@ Our Campus Marketplace & Student Hub is a web-based platform designed specifical
 
 The platform addresses the unique needs of campus communities by creating a trusted marketplace environment where students can safely transact with their peers. By combining marketplace functionality with a student hub that houses event calendars and service listings, we create a centralized digital space that strengthens campus community connections and makes student life more convenient.
 
-For Part 1 of this project, we will focus on core marketplace and event management features with full CRUD (Create, Read, Update, Delete) functionality. Future development phases will include real-time chat features, user authentication systems, and enhanced community tools.
+For Part 3  of this project, we will focus on implementing tgrid party authentication (Googel Oauth and Github Oauth )-We also implemented a profile page where users can customixe there profile picyire username and password -they can also connect their google and github account to their current account for ease of signn in -finally we improved the overall look of our site to match our theme -
 
 2. Site Structure & Page Breakdown
 
