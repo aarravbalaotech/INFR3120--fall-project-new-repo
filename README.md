@@ -25,7 +25,7 @@ Landing/Home Page
 
 
 Hero section with site branding, custom team logo, navigation menu, featured marketplace items, upcoming events preview, call-to-action buttons
-Welcoming design with clear navigation to all sections. "Create Listing" and "View Events" prominent CTAs
+Welcoming design with clear navigation to all sections. "Create Listing" and "View Events" prominent CTAs- On site authentication only showing rest of page when signed in 
 
 
 
@@ -94,12 +94,13 @@ Aarrav
 • Services Page (CRUD implementation)
 • Demo video creation and editing
 • GitHub repository setup and management
+google authentication -Github 
 Marketplace Page (full CRUD implementation)
 -Authentication -db connection -login splash screen -user creation and login backend 
 -overall backend work 
 
 Raj
-• 
+• Profile page 
 • Product listing cards/grid layout
 • Database structure and backend logic for products
 • Search and filter functionality
@@ -112,9 +113,8 @@ Harrison
 • About/Team Page (team profiles, bios, delegation table)
 • Site-wide styling and CSS framework
 • Responsive design implementation
-• Deployment to cloud platform (Render/Netlify/Vercel) or Aarrav if there are difficulties 
 • Peer evaluation coordination
-
+-NavBar looks and formatting 
 
 
 
@@ -146,18 +146,18 @@ Note: All team members must push code from their individual GitHub accounts to d
 6. Technical Stack (Suggested)
 
 Frontend:
-• HTML5, CSS3, JavaScript
-• Framework options: Bootstrap, Tailwind CSS, or custom CSS
-• Consider: React.js or Vue.js (Maybe)
+• HTML5, CSS3, JavaScript,EJS,Node.js
+• Framework options: Bootstrap
+
 
 Backend:
 • Node.js with Express.js
-• Database: MongoDB, PostgreSQL, or Firebase
+• Database: MongoDB
 • RESTful API for CRUD operations
 
 Deployment:
-• Frontend: Netlify or Vercel
-• Backend: Render or Railway
+
+• Backend: Rendera
 • Database: MongoDB Atlas 
 
 7. Future Development (Post Part 1)
@@ -201,5 +201,5 @@ Phase 2 Features:
 ---
 
 End of Project Document
-Last Updated: [Nov 13 Aarrav bala]
+Last Updated: [DEC 3rd Aarrav bala]
 Team: Aarrav, Raj, Harrison
